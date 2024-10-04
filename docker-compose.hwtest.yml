@@ -1,0 +1,31 @@
+version: "3.8"
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: omni-test-backend-container
+    image: vivek57299/omni-test-backend:latest  # Specify your Docker Hub username
+    ports:
+      - "5000:5000"
+    networks:
+      - app-network
+    # No volume mounts to avoid overwriting compiled bytecode
+    # Remove or comment out the volumes section to keep bytecode intact
+    # volumes:
+    #   - ./backend:/app
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: omni-test-frontend-container
+    image: vivek57299/omni-test-frontend:latest  # Specify your Docker Hub username
+    ports:
+      - "80:80"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
