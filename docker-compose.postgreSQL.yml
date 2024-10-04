@@ -1,0 +1,19 @@
+version: '3.8'  # Specify version of Docker Compose
+
+services:
+  postgres:
+    image: postgres:latest  # Pull the latest PostgreSQL image
+    container_name: postgres_container  # Name of the container
+    environment:
+      POSTGRES_USER: your_user  # Set your PostgreSQL user
+      POSTGRES_PASSWORD: your_password  # Set your PostgreSQL password
+      POSTGRES_DB: your_db  # Set your PostgreSQL database name
+    ports:
+      - "5432:5432"  # Expose port 5432 to the host
+    volumes:
+      - pgdata:/var/lib/postgresql/data  # Persist data to a named volume
+
+volumes:
+  pgdata:
+    driver: local  # Use a local volume for data persistence
+
