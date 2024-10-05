@@ -12,8 +12,25 @@ services:
       - "5432:5432"  # Expose port 5432 to the host
     volumes:
       - pgdata:/var/lib/postgresql/data  # Persist data to a named volume
+    networks:
+      - pg_network  # Connect to the same network as pgAdmin4
+
+  pgadmin:
+    image: dpage/pgadmin4  # Pull the pgAdmin4 image
+    container_name: pgadmin4_container  # Name of the container
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@admin.com}  # Use dynamic email from env variable, fallback to default
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}  # Use dynamic password from env variable, fallback to default
+    ports:
+      - "5050:80"  # Map port 5050 on host to port 80 in container
+    networks:
+      - pg_network  # Connect to the same network as PostgreSQL
+    restart: always  # Always restart the container if it stops
 
 volumes:
   pgdata:
     driver: local  # Use a local volume for data persistence
 
+networks:
+  pg_network:
+    driver: bridge  # Use a bridge network for communication between PostgreSQL and pgAdmin
